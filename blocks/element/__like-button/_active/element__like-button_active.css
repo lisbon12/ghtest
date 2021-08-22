@@ -1,0 +1,14 @@
+.elemment__like-button_active {
+  margin-right: 20px;
+  border: 0;
+  padding: 0;
+  min-width: 22px;
+  min-height: 19px;
+  cursor: pointer;
+  background: url(../../../../images/element-like-button-active.svg);
+  transition: opacity 0.2s linear;
+}
+
+.element__like-button_active:hover {
+  opacity: .5;
+}
