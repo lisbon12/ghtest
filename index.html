@@ -21,7 +21,7 @@
         <div class="profile__editor">
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
-            <button type="button" class="profile__edit-button"></button>
+            <button type="button" aria-label="edit profile" class="profile__edit-button"></button>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
           <button type="button" class="profile__add-button"></button>
@@ -75,17 +75,19 @@
     <footer class="footer">
       <p class="footer__copyright">&copy; 2021 Mesto Russia</p>
     </footer>
-    <section class="popup">
-      <form class="popup__container">
-        <h2 class="popup__title">Редактировать профиль</h2>
-        <fieldset class="popup__fieldset">
-          <input class="popup__input" type="text" name="name" placeholder="Жак-Ив Кусто">
-          <input class="popup__input" type="text" name="job" placeholder="Исследователь океана">
-        </fieldset>
-        <button class="popup__submit-button" type="submit">Сохранить</button>
+    <div class="popup">
+      <div class="popup__container">
+        <form name="profile-info" id="popup-profile-info">
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <fieldset class="popup__fieldset">
+            <input class="popup__input" type="text" name="name" id="popup-name" placeholder="Имя пользователя">
+            <input class="popup__input" type="text" name="job" id="popup-job" placeholder="Чем занимаетесь">
+          </fieldset>
+          <button class="popup__submit-button" type="submit">Сохранить</button>
+        </form>
         <button class="popup__close-button" type="button"></button>
-      </form>
-    </section>
+      </div>
+    </div>
   </div>
   <script src="./scripts/script.js"></script>
 </body>

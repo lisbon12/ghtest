@@ -8,5 +8,6 @@
 @media all and (max-width: 1023px) {
   .footer {
     padding-top: 48px;
+    padding-bottom: 36px;
   }
 }

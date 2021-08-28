@@ -9,6 +9,9 @@
   color: white;
   cursor: pointer;
   transition: opacity 0.2s linear;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: normal;
 }
 
 .popup__submit-button:hover {
@@ -20,5 +23,7 @@
     margin: 45px 22px 25px 22px;
     width: 238px;
     height: 46px;
+    font-size: 14px;
+    line-height: 17px;
   }
 }

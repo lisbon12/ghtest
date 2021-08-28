@@ -17,7 +17,6 @@
 @media all and (max-width: 767px) {
   .elements {
     grid-template-columns: 1fr;
-    justify-items: center;
     padding-top: 36px;
   }
 }
