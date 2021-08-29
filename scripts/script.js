@@ -21,10 +21,6 @@ function closePopup() {
   popup.classList.toggle('popup_opened');
 }
 
-// слушатели кликов кнопок редактирования профиля и закрытия, вызывающие соответствующие функции
-profileEditButton.addEventListener('click', openPopup);
-popupCloseButton.addEventListener('click', closePopup);
-
 /* Сначала функция получает событие, которое происходит по умолчанию по нажатию кнопки submit,
 затем она предотвращает это событие по умолчанию (отправка данных на сервер). Далее присваивает значения
 введенные в поля input'ы соответствующим элементам на странице и закрывает попап */
@@ -34,6 +30,10 @@ function formSubmitHandler(event) {
   profileSubtitle.textContent = inputJob.value;
   closePopup();
 }
+
+// слушатели кликов кнопок редактирования профиля и закрытия, вызывающие соответствующие функции
+profileEditButton.addEventListener('click', openPopup);
+popupCloseButton.addEventListener('click', closePopup);
 
 // Добавляем к попап-форме слушателя события submit и запускаем функцию
 popupProfileInfo.addEventListener('submit', formSubmitHandler);
