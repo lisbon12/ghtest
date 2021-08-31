@@ -28,48 +28,15 @@
         </div>
       </section>
       <section class="elements">
-        <div class="element">
-          <img class="element__image" src="./images/element-image-karachaevsk.jpg" alt="Карачаевск">
-          <div class="element__description">
-            <h2 class="element__title">Карачаевск</h2>
-            <button class="element__like-button" type="button"></button>
+        <template id="card-template">
+          <div class="element">
+            <img class="element__image" src="" alt="Фото не отобразилось">
+            <div class="element__description">
+              <h2 class="element__title"></h2>
+              <button class="element__like-button" type="button"></button>
+            </div>
           </div>
-        </div>
-        <div class="element">
-          <img class="element__image" src="./images/element-image-elbrus.jpg" alt="Эльбрус">
-          <div class="element__description">
-            <h2 class="element__title">Гора Эльбрус</h2>
-            <button class="element__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="element">
-          <img class="element__image" src="./images/element-image-dombay.jpg" alt="Домбай">
-          <div class="element__description">
-            <h2 class="element__title">Домбай</h2>
-            <button class="element__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="element">
-          <img class="element__image" src="./images/element-image-elbrus.jpg" alt="Эльбрус">
-          <div class="element__description">
-            <h2 class="element__title">Гора Эльбрус</h2>
-            <button class="element__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="element">
-          <img class="element__image" src="./images/element-image-dombay.jpg" alt="Домбай">
-          <div class="element__description">
-            <h2 class="element__title">Домбай</h2>
-            <button class="element__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="element">
-          <img class="element__image" src="./images/element-image-karachaevsk.jpg" alt="Карачаево-Черкессия">
-          <div class="element__description">
-            <h2 class="element__title">Карачаево-Черкессия</h2>
-            <button class="element__like-button" type="button"></button>
-          </div>
-        </div>
+        </template>
       </section>
     </main>
     <footer class="footer">
@@ -84,6 +51,19 @@
             <input class="popup__input" type="text" name="job" id="popup-job" placeholder="Чем занимаетесь">
           </fieldset>
           <button class="popup__submit-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
+    </div>
+    <div class="popup">
+      <div class="popup__container">
+        <form name="add-card" id="popup-add-card">
+          <h2 class="popup__title">Новое место</h2>
+          <fieldset class="popup__fieldset">
+            <input class="popup__input" type="text" name="place-name" id="place-name" placeholder="Название места">
+            <input class="popup__input" type="text" name="place-link" id="place-link" placeholder="Ссылка на фотографию">
+          </fieldset>
+          <button class="popup__submit-button" type="submit">Создать</button>
         </form>
         <button class="popup__close-button" type="button"></button>
       </div>
