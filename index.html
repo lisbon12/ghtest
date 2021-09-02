@@ -30,12 +30,11 @@
       <section class="elements">
         <template id="card-template">
           <div class="element">
-            <img class="element__image" src="" alt="">
+            <img class="element__image" src="" alt="Фото не отобразилось">
             <div class="element__description">
               <h2 class="element__title"></h2>
               <button class="element__like-button" type="button"></button>
             </div>
-            <button class="element__trash-button" type="button"></button>
           </div>
         </template>
       </section>
@@ -43,21 +42,32 @@
     <footer class="footer">
       <p class="footer__copyright">&copy; 2021 Mesto Russia</p>
     </footer>
-    <template id="popup-template">
-      <div class="popup">
-        <div class="popup__container">
-          <form name="" id="form">
-            <h2 class="popup__title"></h2>
-            <fieldset class="popup__fieldset">
-              <input class="popup__input" type="text" name="" id="input-1" placeholder="">
-              <input class="popup__input" type="text" name="" id="input-2" placeholder="">
-            </fieldset>
-            <button class="popup__submit-button" type="submit"></button>
-          </form>
-          <button class="popup__close-button" type="button"></button>
-        </div>
+    <div class="popup">
+      <div class="popup__container">
+        <form name="profile-info" id="popup-profile-info">
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <fieldset class="popup__fieldset">
+            <input class="popup__input" type="text" name="name" id="popup-name" placeholder="Имя пользователя">
+            <input class="popup__input" type="text" name="job" id="popup-job" placeholder="Чем занимаетесь">
+          </fieldset>
+          <button class="popup__submit-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
       </div>
-    </template>
+    </div>
+    <div class="popup">
+      <div class="popup__container">
+        <form name="add-card" id="popup-add-card">
+          <h2 class="popup__title">Новое место</h2>
+          <fieldset class="popup__fieldset">
+            <input class="popup__input" type="text" name="place-name" id="place-name" placeholder="Название места">
+            <input class="popup__input" type="text" name="place-link" id="place-link" placeholder="Ссылка на фотографию">
+          </fieldset>
+          <button class="popup__submit-button" type="submit">Создать</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
+    </div>
   </div>
   <script src="./scripts/script.js"></script>
 </body>
