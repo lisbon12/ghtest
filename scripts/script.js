@@ -1,3 +1,10 @@
+const popupLargeImage = document.querySelector('.popup_type_large-image');
+const largeImage = popupLargeImage.querySelector('.popup__large-image');
+const popupCloseButton = popupLargeImage.querySelector('.popup__close-button').addEventListener('click', function() {
+  togglePopup(popupLargeImage);
+});
+const popupLargeImageTitle = popupLargeImage.querySelector('.popup__subtitle');
+
 // Поля для ввода значений из попапа профиля
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
@@ -52,6 +59,11 @@ function addCard(data) {
 
   cardElement.querySelector('.element__image').src = data.link;
   cardElement.querySelector('.element__image').alt = 'Фото не отобразилось';
+  cardElement.querySelector('.element__image').addEventListener('click', function(event) {
+    largeImage.src = event.target.src;
+    popupLargeImageTitle.textContent = event.target.closest('.element').querySelector('.element__title').textContent;
+    togglePopup(popupLargeImage);
+  });
   cardElement.querySelector('.element__title').textContent = data.name;
   cardElement.querySelector('.element__trash-button').addEventListener('click', function(event) {
     event.target.closest('.element').remove();
