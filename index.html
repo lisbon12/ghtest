@@ -43,26 +43,37 @@
     <footer class="footer">
       <p class="footer__copyright">&copy; 2021 Mesto Russia</p>
     </footer>
-    <template id="popup-template">
-      <div class="popup">
+      <div class="popup" id="popup-profile">
         <div class="popup__container">
-          <form name="" id="form">
-            <h2 class="popup__title"></h2>
+          <form name="profile-edit" id="profile-edit">
+            <h2 class="popup__title">Редактировать профиль</h2>
             <fieldset class="popup__fieldset">
-              <input class="popup__input" type="text" name="" id="input-1" placeholder="">
-              <input class="popup__input" type="text" name="" id="input-2" placeholder="">
+              <input class="popup__input" type="text" name="user-name" id="user-name" placeholder="Ваше имя">
+              <input class="popup__input" type="text" name="user-job" id="user-job" placeholder="Ваша работа">
             </fieldset>
-            <button class="popup__submit-button" type="submit"></button>
+            <button class="popup__submit-button" type="submit">Сохранить</button>
           </form>
-          <button class="popup__close-button" type="button"></button>
+          <button class="popup__close-button" type="button" id="profile-popup-close-button"></button>
         </div>
       </div>
-    </template>
+      <div class="popup" id="popup-add-card">
+        <div class="popup__container">
+          <form name="add-card" id="add-card">
+            <h2 class="popup__title">Новое место</h2>
+            <fieldset class="popup__fieldset">
+              <input class="popup__input" type="text" name="input-place" id="input-place" placeholder="Название места">
+              <input class="popup__input" type="text" name="input-link" id="input-link" placeholder="Ссылка на фотографию">
+            </fieldset>
+            <button class="popup__submit-button" type="submit">Создать</button>
+          </form>
+          <button class="popup__close-button" type="button" id="add-card-popup-close-button"></button>
+        </div>
+      </div>
     <div class="popup popup_type_large-image">
       <div class="popup__container_type_large-image">
         <img class="popup__large-image" src="" alt="">
         <p class="popup__subtitle"></p>
-        <button class="popup__close-button" type="button"></button>
+        <button class="popup__close-button" type="button" id="large-image-popup-close-button"></button>
       </div>
     </div>
   </div>
