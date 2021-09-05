@@ -88,6 +88,7 @@ function addCard(data) {
   cardElement.querySelector('.element__image').alt = 'Фото не отобразилось';
   cardElement.querySelector('.element__image').addEventListener('click', function(event) {
     largeImage.src = event.target.src;
+    largeImage.alt = event.target.alt;
     largeImagePopupTitle.textContent = event.target.closest('.element').querySelector('.element__title').textContent;
     togglePopup(largeImagePopup);
   });
