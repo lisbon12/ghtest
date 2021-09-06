@@ -2,36 +2,21 @@
 const addCardPopup = document.querySelector('#popup-add-card');
 const addCardPopupPlace = addCardPopup.querySelector('#input-place');
 const addCardPopupLink = addCardPopup.querySelector('#input-link');
-const addCardPopupCloseButton = addCardPopup.querySelector('#add-card-popup-close-button').addEventListener('click', function() {
-  togglePopup(addCardPopup);
-});
-const addCardPopupSubmit = addCardPopup.querySelector('#add-card').addEventListener('submit', function(event) {
-  event.preventDefault();
-  addCard({name: addCardPopupPlace.value, link: addCardPopupLink.value});
-  togglePopup(addCardPopup);
-});
+const addCardPopupCloseButton = addCardPopup.querySelector('#add-card-popup-close-button');
+const addCardPopupSubmit = addCardPopup.querySelector('#add-card');
 
 // Попап редактирования профиля
 const profilePopup = document.querySelector('#popup-profile');
 const profilePopupName = profilePopup.querySelector('#user-name');
 const profilePopupJob = profilePopup.querySelector('#user-job');
-const profilePopupCloseButton = profilePopup.querySelector('#profile-popup-close-button').addEventListener('click', function() {
-  togglePopup(profilePopup);
-});
-const profilePopupSubmit = profilePopup.querySelector('#profile-edit').addEventListener('submit', function(event) {
-  event.preventDefault();
-  userName.textContent = profilePopupName.value;
-  userJob.textContent = profilePopupJob.value;
-  togglePopup(profilePopup);
-});
+const profilePopupCloseButton = profilePopup.querySelector('#profile-popup-close-button');
+const profilePopupSubmit = profilePopup.querySelector('#profile-edit');
 
 // Попап с большой картинкой
 const largeImagePopup = document.querySelector('.popup_type_large-image');
 const largeImage = largeImagePopup.querySelector('.popup__large-image');
 const largeImagePopupTitle = largeImagePopup.querySelector('.popup__subtitle');
-const largeImagePopupCloseButton = largeImagePopup.querySelector('#large-image-popup-close-button').addEventListener('click', function() {
-  togglePopup(largeImagePopup);
-});
+const largeImagePopupCloseButton = largeImagePopup.querySelector('#large-image-popup-close-button');
 
 // Поля для ввода значений из попапа профиля
 const userName = document.querySelector('.profile__title');
@@ -77,36 +62,40 @@ const initialCards = [
 1. Принимает на вход данные из массива;
 2. Создает шаблон карточки;
 3. Подставляет взятые из массива данные в определенные места в шаблоне;
-4. Отображает на странице шаблон с полученными данными;
 5. Удаляет карточку по клику на кнопку корзинки;
 6. Меняет цвет кнопки лайка по нажатию;
 7. Открывает попап с большой картинкой. */
-function addCard(data) {
+function createCard(data) {
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
 
   cardElement.querySelector('.element__image').src = data.link;
-  cardElement.querySelector('.element__image').alt = 'Фото не отобразилось';
+  cardElement.querySelector('.element__image').alt = data.name;
   cardElement.querySelector('.element__image').addEventListener('click', function(event) {
     largeImage.src = event.target.src;
     largeImage.alt = event.target.alt;
-    largeImagePopupTitle.textContent = event.target.closest('.element').querySelector('.element__title').textContent;
+    largeImagePopupTitle.textContent = data.name;
     togglePopup(largeImagePopup);
   });
   cardElement.querySelector('.element__title').textContent = data.name;
-  cardElement.querySelector('.element__trash-button').addEventListener('click', function(event) {
-    event.target.closest('.element').remove();
+  cardElement.querySelector('.element__trash-button').addEventListener('click', function() {
+    cardElement.remove();
   });
   cardElement.querySelector('.element__like-button').addEventListener('click', function(event) {
     event.target.classList.toggle('element__like-button_active');
   });
 
-  cardList.prepend(cardElement);
+  return cardElement;
 };
 
+// Функция, отрисовывающая карточку на странице
+function renderCard(card) {
+  cardList.prepend(card);
+}
+
 /* Методом forEach перебираем все элементы массива с карточками по умолчанию
-и к каждому элементу массива применяем функцию, для взятия данных из массива */
+и к каждому элементу массива применяем функцию, отрисовывающую созданную карточку */
 initialCards.forEach(function (data) {
-  addCard(data);
+  renderCard(createCard(data));
 });
 
 /* Отдельная функция для открытия попапа профиля в связи с тем,
@@ -122,9 +111,29 @@ function togglePopup(popup) {
   popup.classList.toggle('popup_opened');
 }
 
-// Слушатели кнопок для открытия попапов
+// Слушатели кнопок
 profileEditButton.addEventListener('click', openProfilePopup);
+profilePopupCloseButton.addEventListener('click', function() {
+  togglePopup(profilePopup);
+});
+profilePopupSubmit.addEventListener('submit', function(event) {
+  event.preventDefault();
+  userName.textContent = profilePopupName.value;
+  userJob.textContent = profilePopupJob.value;
+  togglePopup(profilePopup);
+});
 addCardButton.addEventListener('click', function() {
   togglePopup(addCardPopup);
 });
-
+addCardPopupCloseButton.addEventListener('click', function() {
+  togglePopup(addCardPopup);
+});
+addCardPopupSubmit.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const card = createCard({name: addCardPopupPlace.value, link: addCardPopupLink.value});
+  renderCard(card);
+  togglePopup(addCardPopup);
+});
+largeImagePopupCloseButton.addEventListener('click', function() {
+  togglePopup(largeImagePopup);
+});
