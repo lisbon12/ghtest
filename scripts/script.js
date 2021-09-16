@@ -104,6 +104,14 @@ function openProfilePopup() {
   profilePopupName.value = userName.textContent;
   profilePopupJob.value = userJob.textContent;
   togglePopup(profilePopup);
+  enableValidation({
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__submit-button',
+    inactiveButtonClass: 'popup__submit-button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+  });
 }
 
 // Функция открытия и закрытия попапа
