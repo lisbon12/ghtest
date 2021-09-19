@@ -1,5 +1,6 @@
 // Попап добавления карточки
 const addCardPopup = document.querySelector('#popup-add-card');
+const addCardContainer = addCardPopup.querySelector('#add-card-container');
 const addCardPopupPlace = addCardPopup.querySelector('#input-place');
 const addCardPopupLink = addCardPopup.querySelector('#input-link');
 const addCardPopupCloseButton = addCardPopup.querySelector('#add-card-popup-close-button');
@@ -7,6 +8,7 @@ const addCardPopupSubmit = addCardPopup.querySelector('#add-card');
 
 // Попап редактирования профиля
 const profilePopup = document.querySelector('#popup-profile');
+const profileContainer = profilePopup.querySelector('#profile-container');
 const profilePopupName = profilePopup.querySelector('#user-name');
 const profilePopupJob = profilePopup.querySelector('#user-job');
 const profilePopupCloseButton = profilePopup.querySelector('#profile-popup-close-button');
@@ -14,6 +16,7 @@ const profilePopupSubmit = profilePopup.querySelector('#profile-edit');
 
 // Попап с большой картинкой
 const largeImagePopup = document.querySelector('.popup_type_large-image');
+const largeImageContainer = largeImagePopup.querySelector('#large-image-container');
 const largeImage = largeImagePopup.querySelector('.popup__large-image');
 const largeImagePopupTitle = largeImagePopup.querySelector('.popup__subtitle');
 const largeImagePopupCloseButton = largeImagePopup.querySelector('#large-image-popup-close-button');
@@ -99,7 +102,8 @@ initialCards.forEach(function (data) {
 });
 
 /* Отдельная функция для открытия попапа профиля в связи с тем,
-что необходимо подставить определенные данные, сразу при открытии */
+что необходимо подставить определенные данные, сразу при открытии,
+а также провалидировать их */
 function openProfilePopup() {
   profilePopupName.value = userName.textContent;
   profilePopupJob.value = userJob.textContent;
@@ -117,6 +121,11 @@ function openProfilePopup() {
 // Функция открытия и закрытия попапа
 function togglePopup(popup) {
   popup.classList.toggle('popup_opened');
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      togglePopup(popup);
+    }
+  });
 }
 
 // Слушатели кнопок
@@ -144,4 +153,24 @@ addCardPopupSubmit.addEventListener('submit', function(event) {
 });
 largeImagePopupCloseButton.addEventListener('click', function() {
   togglePopup(largeImagePopup);
+});
+
+// слушатели для закрытия попапов по пустому месту
+profilePopup.addEventListener('click', function() {
+  togglePopup(profilePopup);
+})
+profileContainer.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+addCardPopup.addEventListener('click', function() {
+  togglePopup(addCardPopup);
+})
+addCardContainer.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+largeImagePopup.addEventListener('click', function() {
+  togglePopup(largeImagePopup);
+})
+largeImageContainer.addEventListener('click', function(event) {
+  event.stopPropagation();
 });
