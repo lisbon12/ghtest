@@ -111,25 +111,33 @@ function openProfilePopup() {
   openPopup(profilePopup);
 }
 
-// Функция открытия попапа
+// Функция открытия попапа и навешение слушателя закрытия на Escape
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', pressEsc);
 }
 
-// Функция закрытия попапа
+// Функция закрытия попапа и снятие слушателя закрытия на Escape
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', pressEsc);
 }
 
+// Функция, при вызове которой, закрыть попап можно по нажатию Escape
 function pressEsc(event) {
   if (event.key === 'Escape') {
-    closePopup(popup);
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
   }
 }
 
-// Слушатели кнопок
+function closePopupByClick(event) {
+  if (event.target.classList.contains('popup_opened')) {
+    closePopup(event.target);
+  }
+}
+
+// Слушатели кнопок попапа профиля
 profileEditButton.addEventListener('click', openProfilePopup);
 profilePopupCloseButton.addEventListener('click', function() {
   closePopup(profilePopup);
@@ -140,6 +148,9 @@ profilePopupSubmit.addEventListener('submit', function(event) {
   userJob.textContent = profilePopupJob.value;
   closePopup(profilePopup);
 });
+profilePopup.addEventListener('mousedown', closePopupByClick);
+
+// Слушатели кнопок попапа добавления карточки
 addCardButton.addEventListener('click', function() {
   openPopup(addCardPopup);
 });
@@ -152,26 +163,10 @@ addCardPopupSubmit.addEventListener('submit', function(event) {
   renderCard(card);
   closePopup(addCardPopup);
 });
+addCardPopup.addEventListener('mousedown', closePopupByClick);
+
+// Слушатели кнопок попапа большой картинки
 largeImagePopupCloseButton.addEventListener('click', function() {
   closePopup(largeImagePopup);
 });
-
-// слушатели для закрытия попапов по пустому месту
-profilePopup.addEventListener('click', function() {
-  closePopup(profilePopup);
-})
-profileContainer.addEventListener('click', function(event) {
-  event.stopPropagation();
-});
-addCardPopup.addEventListener('click', function() {
-  closePopup(addCardPopup);
-})
-addCardContainer.addEventListener('click', function(event) {
-  event.stopPropagation();
-});
-largeImagePopup.addEventListener('click', function() {
-  closePopup(largeImagePopup);
-})
-largeImageContainer.addEventListener('click', function(event) {
-  event.stopPropagation();
-});
+largeImagePopup.addEventListener('mousedown', closePopupByClick);
