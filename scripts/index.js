@@ -1,3 +1,5 @@
+import Card from './Card.js';
+
 // Попап добавления карточки
 const addCardPopup = document.querySelector('#popup-add-card');
 const addCardContainer = addCardPopup.querySelector('#add-card-container');
@@ -31,7 +33,7 @@ const addCardButton = document.querySelector('.profile__add-button');
 
 // создаем шаблон карточки, готовый к принятию значений по умолчанию
 const cardList = document.querySelector('.elements');
-const cardTemplate = document.querySelector('#card-template').content;
+// const cardTemplate = document.querySelector('#card-template').content;
 
 //Карточки по умолчанию при загрузке страницы
 const initialCards = [
@@ -68,28 +70,28 @@ const initialCards = [
 5. Удаляет карточку по клику на кнопку корзинки;
 6. Меняет цвет кнопки лайка по нажатию;
 7. Открывает попап с большой картинкой. */
-function createCard(data) {
-  const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
-  const elementImage = cardElement.querySelector('.element__image');
+// function createCard(data) {
+//   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
+//   const elementImage = cardElement.querySelector('.element__image');
 
-  elementImage.src = data.link;
-  elementImage.alt = data.name;
-  elementImage.addEventListener('click', function(event) {
-    largeImage.src = data.link;
-    largeImage.alt = data.name;
-    largeImagePopupTitle.textContent = data.name;
-    openPopup(largeImagePopup);
-  });
-  cardElement.querySelector('.element__title').textContent = data.name;
-  cardElement.querySelector('.element__trash-button').addEventListener('click', function() {
-    cardElement.remove();
-  });
-  cardElement.querySelector('.element__like-button').addEventListener('click', function(event) {
-    event.target.classList.toggle('element__like-button_active');
-  });
+//   elementImage.src = data.link;
+//   elementImage.alt = data.name;
+//   elementImage.addEventListener('click', function(event) {
+//     largeImage.src = data.link;
+//     largeImage.alt = data.name;
+//     largeImagePopupTitle.textContent = data.name;
+//     openPopup(largeImagePopup);
+//   });
+//   cardElement.querySelector('.element__title').textContent = data.name;
+//   cardElement.querySelector('.element__trash-button').addEventListener('click', function() {
+//     cardElement.remove();
+//   });
+//   cardElement.querySelector('.element__like-button').addEventListener('click', function(event) {
+//     event.target.classList.toggle('element__like-button_active');
+//   });
 
-  return cardElement;
-};
+//   return cardElement;
+// };
 
 // Функция, отрисовывающая карточку на странице
 function renderCard(card) {
@@ -99,7 +101,8 @@ function renderCard(card) {
 /* Методом forEach перебираем все элементы массива с карточками по умолчанию
 и к каждому элементу массива применяем функцию, отрисовывающую созданную карточку */
 initialCards.forEach(function (data) {
-  renderCard(createCard(data));
+  let card = new Card(data, '#card-template');
+  renderCard(card.createCard());
 });
 
 /* Отдельная функция для открытия попапа профиля в связи с тем,
@@ -159,8 +162,8 @@ addCardPopupCloseButton.addEventListener('click', function() {
 });
 addCardPopupSubmit.addEventListener('submit', function(event) {
   event.preventDefault();
-  const card = createCard({name: addCardPopupPlace.value, link: addCardPopupLink.value});
-  renderCard(card);
+  const card = new Card({name: addCardPopupPlace.value, link: addCardPopupLink.value}, '#card-template');
+  renderCard(card.createCard());
   closePopup(addCardPopup);
 });
 addCardPopup.addEventListener('mousedown', closePopupByClick);
@@ -170,3 +173,5 @@ largeImagePopupCloseButton.addEventListener('click', function() {
   closePopup(largeImagePopup);
 });
 largeImagePopup.addEventListener('mousedown', closePopupByClick);
+
+export { largeImage, largeImagePopupTitle, largeImagePopup, openPopup };
