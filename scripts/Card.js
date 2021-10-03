@@ -6,7 +6,6 @@ export default class Card {
     this._cardSelector = cardSelector;
     this._name = data.name;
     this._link = data.link;
-    console.log(this._name);
   }
 
   createCard() {

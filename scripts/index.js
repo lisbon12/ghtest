@@ -63,13 +63,13 @@ const initialCards = [
 ];
 
 // Конфигурация классов и селекторов для валидации
-const validationConfig = [
-  {inputSelector: '.popup__input'},
-  {submitButtonSelector: '.popup__submit-button'},
-  {inactiveButtonClass: 'popup__submit-button_disabled'},
-  {inputErrorClass: 'popup__input_type_error'},
-  {errorClass: 'popup__error_visible'}
-];
+const validationConfig = {
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__submit-button',
+  inactiveButtonClass: 'popup__submit-button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
 
 // Функция, отрисовывающая карточку на странице
 function renderCard(card) {
@@ -83,7 +83,9 @@ initialCards.forEach(function (data) {
   renderCard(card.createCard());
 });
 
-new FormValidator(validationConfig, '#add-card').log();
+// Включаем валидацию для форм
+new FormValidator(validationConfig, '#profile-edit').enableValidation();
+new FormValidator(validationConfig, '#add-card').enableValidation();
 
 /* Отдельная функция для открытия попапа профиля в связи с тем,
 что необходимо подставить определенные данные, сразу при открытии,
