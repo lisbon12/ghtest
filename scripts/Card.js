@@ -1,4 +1,4 @@
-import { largeImage, largeImagePopupTitle, largeImagePopup, openPopup } from './index.js';
+import { openLargeImagePopup } from './index.js';
 
 export default class Card {
 
@@ -8,27 +8,34 @@ export default class Card {
     this._link = data.link;
   }
 
-  createCard() {
-  const cardElement = document.querySelector(this._cardSelector).content.querySelector('.element').cloneNode(true);
-  const elementImage = cardElement.querySelector('.element__image');
+  _getTemplate() {
+    const cardElement = document.querySelector(this._cardSelector).content.querySelector('.element').cloneNode(true);
+    return cardElement;
+  }
 
-  elementImage.src = this._link;
-  elementImage.alt = this._name;
-  elementImage.addEventListener('click', function() {
-    largeImage.src = this._link;
-    largeImage.alt = this._name;
-    largeImagePopupTitle.textContent = this._name;
-    openPopup(largeImagePopup);
-  }.bind(this));
-  cardElement.querySelector('.element__title').textContent = this._name;
-  cardElement.querySelector('.element__trash-button').addEventListener('click', function() {
-    cardElement.remove();
-  });
-  cardElement.querySelector('.element__like-button').addEventListener('click', function(event) {
+  _setEventListeners() {
+    this._element.querySelector('.element__image').addEventListener('click', openLargeImagePopup);
+    this._element.querySelector('.element__trash-button').addEventListener('click', this._deleteCard);
+    this._element.querySelector('.element__like-button').addEventListener('click', this._toggleLike);
+  }
+
+  _deleteCard(event) {
+    event.target.closest('.element').remove();
+  }
+
+  _toggleLike(event) {
     event.target.classList.toggle('element__like-button_active');
-  });
+  }
 
-  return cardElement;
+  createCard() {
+  this._element = this._getTemplate();
+  this._element.querySelector('.element__image').src = this._link;
+  this._element.querySelector('.element__image').alt = this._name;
+  this._element.querySelector('.element__title').textContent = this._name;
+
+  this._setEventListeners();
+
+  return this._element;
   };
 
 }

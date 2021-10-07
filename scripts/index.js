@@ -99,6 +99,31 @@ function openProfilePopup() {
   profileFormValidator.resetValidation();
 }
 
+function openLargeImagePopup(event) {
+  largeImage.src = event.target.src;
+  largeImage.alt = event.target.closest('.element').querySelector('.element__title').textContent;
+  largeImagePopupTitle.textContent = event.target.closest('.element').querySelector('.element__title').textContent;
+  openPopup(largeImagePopup);
+}
+
+// Функция сабмита формы профиля
+function submitProfileForm(event) {
+  event.preventDefault();
+  userName.textContent = profilePopupName.value;
+  userJob.textContent = profilePopupJob.value;
+  closePopup(profilePopup);
+}
+
+// Функция сабмита формы добавления карточки
+function submitAddCardForm(event) {
+  event.preventDefault();
+  const card = new Card({name: addCardPopupPlace.value, link: addCardPopupLink.value}, '#card-template');
+  renderCard(card.createCard());
+  closePopup(addCardPopup);
+  addCardPopupPlace.value = '';
+  addCardPopupLink.value = '';
+}
+
 // Функция открытия попапа и навешение слушателя закрытия на Escape
 function openPopup(popup) {
   popup.classList.add('popup_opened');
@@ -131,12 +156,7 @@ profileEditButton.addEventListener('click', openProfilePopup);
 profilePopupCloseButton.addEventListener('click', function() {
   closePopup(profilePopup);
 });
-profilePopupForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  userName.textContent = profilePopupName.value;
-  userJob.textContent = profilePopupJob.value;
-  closePopup(profilePopup);
-});
+profilePopupForm.addEventListener('submit', submitProfileForm);
 profilePopup.addEventListener('mousedown', closePopupByClick);
 
 // Слушатели кнопок попапа добавления карточки
@@ -146,14 +166,7 @@ addCardButton.addEventListener('click', function() {
 addCardPopupCloseButton.addEventListener('click', function() {
   closePopup(addCardPopup);
 });
-addCardPopupForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  const card = new Card({name: addCardPopupPlace.value, link: addCardPopupLink.value}, '#card-template');
-  renderCard(card.createCard());
-  closePopup(addCardPopup);
-  addCardPopupPlace.value = '';
-  addCardPopupLink.value = '';
-});
+addCardPopupForm.addEventListener('submit', submitAddCardForm);
 addCardPopup.addEventListener('mousedown', closePopupByClick);
 
 // Слушатели кнопок попапа большой картинки
@@ -163,4 +176,4 @@ largeImagePopupCloseButton.addEventListener('click', function() {
 largeImagePopup.addEventListener('mousedown', closePopupByClick);
 
 // Экспорт
-export { largeImage, largeImagePopupTitle, largeImagePopup, openPopup };
+export { openLargeImagePopup };
