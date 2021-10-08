@@ -122,6 +122,7 @@ function submitAddCardForm(event) {
   closePopup(addCardPopup);
   addCardPopupPlace.value = '';
   addCardPopupLink.value = '';
+  addCardFormValidator.resetValidation();
 }
 
 // Функция открытия попапа и навешение слушателя закрытия на Escape
