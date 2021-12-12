@@ -1,11 +1,10 @@
-import { openLargeImagePopup } from './index.js';
-
 export default class Card {
 
-  constructor(data, cardSelector) {
+  constructor({ link, name }, cardSelector, handleCardClick) {
     this._cardSelector = cardSelector;
-    this._name = data.name;
-    this._link = data.link;
+    this._link = link;
+    this._name = name;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
@@ -14,7 +13,9 @@ export default class Card {
   }
 
   _setEventListeners() {
-    this._element.querySelector('.element__image').addEventListener('click', openLargeImagePopup);
+    this._element.querySelector('.element__image').addEventListener('click', () => {
+      this._handleCardClick({link: this._link, name: this._name});
+    });
     this._element.querySelector('.element__trash-button').addEventListener('click', this._deleteCard);
     this._element.querySelector('.element__like-button').addEventListener('click', this._toggleLike);
   }
@@ -28,14 +29,13 @@ export default class Card {
   }
 
   createCard() {
-  this._element = this._getTemplate();
-  this._element.querySelector('.element__image').src = this._link;
-  this._element.querySelector('.element__image').alt = this._name;
-  this._element.querySelector('.element__title').textContent = this._name;
+    this._element = this._getTemplate();
+    this._element.querySelector('.element__image').src = this._link;
+    this._element.querySelector('.element__image').alt = this._name;
+    this._element.querySelector('.element__title').textContent = this._name;
 
-  this._setEventListeners();
+    this._setEventListeners();
 
-  return this._element;
+    return this._element;
   };
-
 }
