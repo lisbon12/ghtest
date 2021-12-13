@@ -102,13 +102,17 @@ const handleCardClick = ({ link, name }) => {
 const createNewCard = (data) => {
   const card = new Card(data, '#card-template', handleCardClick);
   const cardElement = card.createCard();
-  cardList.addItem(cardElement);
+  return cardElement
 }
 
 const cardList = new Section({
   items: initialCards,
   renderer: createNewCard
 }, '.elements');
+
+initialCards.forEach(item => {
+  cardList.addItem(createNewCard(item))
+});
 
 cardList.renderItems();
 
