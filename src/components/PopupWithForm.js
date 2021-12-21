@@ -5,6 +5,8 @@ export default class PopupWithForm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
     super(popupSelector);
     this._handleFormSubmit = handleFormSubmit;
+    this._popupForm = this._popupElement.querySelector('.popup__form');
+    this._inputList = Array.from(this._popupElement.querySelectorAll('.popup__input'));
   }
 
   // Публичный метод, добавляющий слушатель submit к форме с полями и при клике на кнопку submit применяющий функцию (переданную в конструктор) обработки данных, введённых в поля,
@@ -20,15 +22,14 @@ export default class PopupWithForm extends Popup {
 
   // Публичный метод, сбрасывающий введённые значения в поля ввода при закрытии попапа
   close() {
-    this._popupElement.querySelector('.popup__form').reset();
+    this._popupForm.reset();
     super.close();
   }
 
   // Приватный метод, собирающий данные, введённые в поля в объект
   _getInputValues() {
     const formValues = {};
-    const inputList = Array.from(this._popupElement.querySelectorAll('.popup__input'));
-    inputList.forEach(inputElement => formValues[inputElement.name] = inputElement.value);
+    this._inputList.forEach(inputElement => formValues[inputElement.name] = inputElement.value);
     return formValues;
   }
 }
