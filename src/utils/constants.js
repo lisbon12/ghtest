@@ -11,6 +11,10 @@ export const profilePopupForm = profilePopup.querySelector('#profile-edit');
 // Попап с большой картинкой
 export const largeImagePopup = document.querySelector('.popup_type_large-image');
 
+//Попап подтверждения
+// export const confirmationPopup = document.querySelector('.popup_type-confirm');
+// export const confirmationPopupButton = confirmationPopup.querySelector('.popup__submit-button')
+
 // Кнопки
 export const profileEditButton = document.querySelector('.profile__edit-button');
 export const addCardButton = document.querySelector('.profile__add-button');

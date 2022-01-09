@@ -6,7 +6,7 @@
     <meta name="description" content="Социальная сеть для загрузки фотографий">
     <meta name="keywords" content="социальная, сеть, фотографии, профиль">
     <meta name="author" content="Вадим Киреев">
-    <link rel="icon" href="./images/favicon.jpg">
+    <link rel="icon" href="<%=require('./images/favicon.jpg')%>">
     <title>Mesto</title>
 </head>
 <body>
@@ -32,7 +32,10 @@
             <img class="element__image" src="#" alt="#">
             <div class="element__description">
               <h2 class="element__title"></h2>
-              <button class="element__like-button" type="button"></button>
+              <div class="element__like-group">
+                <button class="element__like-button" type="button"></button>
+                <p class="element__like-counter">0</p>
+              </div>
             </div>
             <button class="element__trash-button" type="button"></button>
           </div>
@@ -82,6 +85,10 @@
         <p class="popup__subtitle"></p>
         <button class="popup__close-button" type="button" id="large-image-popup-close-button"></button>
       </div>
+    </div>
+    <div class="popup popup_type_confirm">
+      <h2 class="popup__title">Вы уверены?</h2>
+      <button class="popup__submit-button" type="submit">Да</button>
     </div>
   </div>
 </body>
