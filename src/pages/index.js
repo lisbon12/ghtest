@@ -1,15 +1,14 @@
-// Импорт css
 import './index.css'
 
-// Импорт классов
+import Api from '../components/Api.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithSubmit from '../components/PopupWithSubmit.js';
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
 
-//Импорт переменных
 import {
   addCardPopup,
   addCardPopupForm,
@@ -18,61 +17,122 @@ import {
   profilePopupJob,
   profilePopupForm,
   largeImagePopup,
+  confirmationPopup,
+  avatarPopup,
+  avatarPopupForm,
   profileEditButton,
   addCardButton,
-  initialCards,
+  userName,
+  userJob,
+  userAvatar,
+  avatarEditButton,
   validationConfig
 } from '../utils/constants.js'
 
-// Создание переменных, содержащих экземпляры класса валидации формы,
-// активация этих классов путём вызова публичного метода
+import { data } from 'autoprefixer';
+
+const api = new Api({
+  cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort36/cards/',
+  userInfoUrl: 'https://nomoreparties.co/v1/cohort36/users/me/',
+  userAvatarUrl: 'https://mesto.nomoreparties.co/v1/cohort36/users/me/avatar/',
+  headers: {
+    authorization: 'e06c5c48-192d-40c5-8786-85ace49aadcc',
+    'Content-Type': 'application/json'
+  }
+});
+
+const cardsArray = api.getCards();
+cardsArray.then((arrayOfCards) => {
+  arrayOfCards.reverse().forEach((card) => {
+    cardList.addItem(createNewCard(card))
+  });
+}).catch((err) => {
+  alert(err);
+});
+
+const user = api.getUserInfo();
+user.then((userData) => {
+  userName.textContent = userData.name;
+  userJob.textContent = userData.about;
+  userAvatar.src = userData.avatar;
+  console.log(userData);
+}).catch((err) => {
+  alert(err);
+});
+
 const profileFormValidator = new FormValidator(validationConfig, profilePopupForm);
 profileFormValidator.enableValidation();
 const addCardFormValidator = new FormValidator(validationConfig, addCardPopupForm);
 addCardFormValidator.enableValidation();
+const avatarEditFormValidator = new FormValidator(validationConfig, avatarPopupForm);
+avatarEditFormValidator.enableValidation();
 
-// Создание переменной, содержащей экземпляр класса попапа с картинкой,
-// навешение слушателей на этот класс
 const popupWithImage = new PopupWithImage(largeImagePopup);
 popupWithImage.setEventListeners();
 
-// Создание обработчика нажатия на кнопку submit попапа добавления карточки,
-// добавляет в вёрстку в место для новых карточек результат действия функции создания новой карточки с параметрами новой карточки
-const handleAddCardFormSubmit = (data) => {
-  cardList.addItem(createNewCard(data));
+const handleDeleteCardClick = (cardElement, cardId) => {
+  popupWithSubmit.open();
+  popupWithSubmit.setEventListeners(cardElement, cardId);
 }
 
-// Создание переменной, содержащей экземпляр класса попапа для добавления карточки,
-// навешение слушателей на этот класс
+const handleDeleteCardSubmit = (cardElement, cardId) => {
+  api.deleteCard(cardId).then(() => {
+    cardElement.remove();
+  }).catch((err) => {
+    alert(err);
+  });
+}
+
+const popupWithSubmit = new PopupWithSubmit(confirmationPopup, handleDeleteCardSubmit);
+
+const handleAvatarEditFormSubmit = (newAvatarUrl) => {
+  api.editUserAvatar(newAvatarUrl).then((newAvatarUrl) => {
+    userAvatar.src = newAvatarUrl.avatar;
+  }).catch((err) => {
+    alert(err)
+    }).finally(() => {
+    avatarEditPopup.uploadEffectOff();
+      });
+}
+
+const avatarEditPopup = new PopupWithForm(avatarPopup, handleAvatarEditFormSubmit);
+avatarEditPopup.setEventListeners();
+
+const handleAddCardFormSubmit = (data) => {
+  api.postCard(data).then((data) => {
+    cardList.addItem(createNewCard(data));
+  }).catch((err) => {
+      alert(err);
+    }).finally(() => {
+      newCardPopup.uploadEffectOff();
+      });
+}
+
 const newCardPopup = new PopupWithForm(addCardPopup, handleAddCardFormSubmit);
 newCardPopup.setEventListeners();
 
-// Навешение на кнопку добавления новой карточки слушателя клика, который откроет попап добавления новой карточки
-// и сбрасывает валидацию форм
 addCardButton.addEventListener('click', () => {
   newCardPopup.open();
   addCardFormValidator.resetValidation();
 });
 
-// Создание переменной, содержащей экземпляр класса с информацией о пользователе,
-// в конструктор передаётся объект с селекторами имени профиля и места работы
-const userInfo = new UserInfo({userName: '.profile__title', userJob: '.profile__subtitle'});
+const userInfo = new UserInfo(userName, userJob);
 
-// Создание обработчика нажатия на кнопку submit попапа редактирования профиля,
-// который с помощью публичного метода добавит в текстовые значения селекторов
-// имени профиля и места работы, значения, введённые в поля ввода
 const handleProfileEditFormSubmit = (data) => {
-  userInfo.setUserInfo(data)
+  userInfo.setUserInfo(data);
+  api.editUserInfo(data).then((data) => {
+    userName.textContent = data.name;
+    userJob.textContent = data.about;
+  }).catch((err) => {
+    alert(err);
+    }).finally(() => {
+      newProfilePopup.uploadEffectOff();
+      });
 };
 
-// Создание переменной, содержащей экземпляр класса попапа для редактирования профиля,
-// навешение слушателей на этот класс
 const newProfilePopup = new PopupWithForm(profilePopup, handleProfileEditFormSubmit);
 newProfilePopup.setEventListeners();
 
-// Навешение на кнопку редактирования профиля слушателя клика, который откроет попап редактирования профиля,
-// соберёт текстовые значения, написанные в селекторах имени пользователя и места работы,
-// подставит эти значения в поля ввода и сбросит валидацию форм
 profileEditButton.addEventListener('click', () => {
   newProfilePopup.open();
   const userInfoData = userInfo.getUserInfo();
@@ -81,36 +141,19 @@ profileEditButton.addEventListener('click', () => {
   profileFormValidator.resetValidation();
 });
 
-// Создание обработчика клика на фотографию карточки, который открывает попап с картинкой
+avatarEditButton.addEventListener('click', () => {
+  avatarEditPopup.open();
+  avatarEditFormValidator.resetValidation();
+});
+
 const handleCardClick = ({ link, name }) => {
   popupWithImage.open({ link, name });
 }
 
-// Фунция создания новой карточки, которая принимает в себя данные,
-// создаёт экземпляр класса карточки, в конструктор которой передаются те же данные,
-// что и в функцию создания карточки, а также шаблон из вёрстки для создания новой карточки и обработчик клика на картинику карточки.
-// После чего, вызывается публичный метод, в котором карточка собирается из шаблона, в неё подставляются значения и навешиваются слушатели.
-// Результатом действия этой функции является готовая карточка.
 const createNewCard = (data) => {
-  const card = new Card(data, '#card-template', handleCardClick);
+  const card = new Card(data, '#card-template', handleCardClick, handleDeleteCardClick, api);
   const cardElement = card.createCard();
   return cardElement
 }
 
-// Объявление переменной, содержащей экземпляр класса с секцией для размещения карточек.
-// В конструктор этого класса передаётся массив данных для создания стандартного набора карточек,
-// функция для создания карточек на основе массива данных для создания стандартного набора карточек,
-// а также селектора из вёрстки, куда все эти карточки должны быть помещены
-const cardList = new Section({
-  items: initialCards,
-  renderer: createNewCard
-}, '.elements');
-
-// Проходим по массиву данных для стандартного набора карточек,
-// добавляем в вёрстку в место для новых карточек результат действия функции создания новой карточки с параметрами новой карточки
-initialCards.forEach(item => {
-  cardList.addItem(createNewCard(item))
-});
-
-// Публичный метод класса секции с карточками, применяющий функцию для создания новой карточки к массиву данных со стандартным набором карточек
-cardList.renderItems();
+const cardList = new Section('.elements');
