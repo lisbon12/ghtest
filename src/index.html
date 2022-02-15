@@ -17,7 +17,7 @@
     <main>
       <section class="profile">
         <div class="profile__avatar-group">
-          <img class="profile__avatar" src="" alt="Ваш аватар">
+          <img class="profile__avatar" src="#" alt="Ваш аватар">
           <button class="profile__avatar-edit-button"></button>
         </div>
         <div class="profile__editor">
@@ -73,13 +73,13 @@
             <h2 class="popup__title">Обновить аватар</h2>
             <fieldset class="popup__fieldset">
               <label class="popup__label">
-                <input class="popup__input" type="url" name="avatar" id="input-link" placeholder="Ссылка на фотографию" required>
-                <span class="popup__error" id="input-link-error"></span>
+                <input class="popup__input" type="url" name="avatar" id="input-avatar-link" placeholder="Ссылка на фотографию" required>
+                <span class="popup__error" id="input-avatar-link-error"></span>
               </label>
             </fieldset>
             <button class="popup__submit-button" type="submit">Сохранить</button>
           </form>
-          <button class="popup__close-button" type="button" id="profile-popup-close-button"></button>
+          <button class="popup__close-button" type="button" id="avatar-popup-close-button"></button>
         </div>
       </div>
       <div class="popup" id="popup-add-card">
@@ -110,7 +110,7 @@
           <h2 class="popup__title">Вы уверены?</h2>
           <button class="popup__submit-button" type="submit">Да</button>
         </form>
-        <button class="popup__close-button" type="button" id="add-card-popup-close-button"></button>
+        <button class="popup__close-button" type="button" id="confirm-popup-close-button"></button>
       </div>
     </div>
   </div>
