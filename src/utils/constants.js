@@ -24,9 +24,9 @@ export const addCardButton = document.querySelector('.profile__add-button');
 export const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
 
 // Информация о профиле
-export const userName = document.querySelector('.profile__title');
-export const userJob = document.querySelector('.profile__subtitle');
-export const userAvatar = document.querySelector('.profile__avatar');
+export const userNameField = document.querySelector('.profile__title');
+export const userJobField = document.querySelector('.profile__subtitle');
+export const userAvatarField = document.querySelector('.profile__avatar');
 
 // Конфигурация классов и селекторов для валидации
 export const validationConfig = {

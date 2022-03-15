@@ -22,14 +22,21 @@ import {
   avatarPopupForm,
   profileEditButton,
   addCardButton,
-  userName,
-  userJob,
-  userAvatar,
+  userNameField,
+  userJobField,
+  userAvatarField,
   avatarEditButton,
   validationConfig
 } from '../utils/constants.js'
 
 import { data } from 'autoprefixer';
+
+const profileFormValidator = new FormValidator(validationConfig, profilePopupForm);
+profileFormValidator.enableValidation();
+const addCardFormValidator = new FormValidator(validationConfig, addCardPopupForm);
+addCardFormValidator.enableValidation();
+const avatarEditFormValidator = new FormValidator(validationConfig, avatarPopupForm);
+avatarEditFormValidator.enableValidation();
 
 const api = new Api({
   cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort36/cards/',
@@ -41,6 +48,56 @@ const api = new Api({
   }
 });
 
+api.getUserInfo().then((userData) => {
+  init(userData);
+}).catch((err) => {
+  alert(err);
+});
+
+const init = (userData) => {
+  const userInfo = new UserInfo(userData, userNameField, userJobField, userAvatarField);
+  userInfo.setUserInfo(userData);
+
+  const handleProfileEditFormSubmit = (data) => {
+    api.editUserInfo(data).then((data) => {
+      userInfo.setUserInfo(data);
+    }).catch((err) => {
+      alert(err);
+      }).finally(() => {
+        newProfilePopup.uploadEffectOff();
+        });
+  }
+
+  const handleAvatarEditFormSubmit = (newAvatarUrl) => {
+    api.editUserAvatar(newAvatarUrl).then((newAvatarUrl) => {
+      userInfo.setUserInfo(newAvatarUrl);
+    }).catch((err) => {
+      alert(err)
+      }).finally(() => {
+      avatarEditPopup.uploadEffectOff();
+        });
+  }
+
+  const newProfilePopup = new PopupWithForm(profilePopup, handleProfileEditFormSubmit);
+  newProfilePopup.setEventListeners();
+
+  const avatarEditPopup = new PopupWithForm(avatarPopup, handleAvatarEditFormSubmit);
+  avatarEditPopup.setEventListeners();
+
+  profileEditButton.addEventListener('click', () => {
+    const userInfoData = userInfo.getUserInfo();
+    profilePopupName.value = userInfoData.name;
+    profilePopupJob.value = userInfoData.about;
+    profileFormValidator.resetValidation();
+    newProfilePopup.open();
+  });
+
+  avatarEditButton.addEventListener('click', () => {
+    avatarEditPopup.open();
+    avatarEditFormValidator.resetValidation();
+  });
+}
+
 const cardsArray = api.getCards();
 cardsArray.then((arrayOfCards) => {
   arrayOfCards.reverse().forEach((card) => {
@@ -49,23 +106,6 @@ cardsArray.then((arrayOfCards) => {
 }).catch((err) => {
   alert(err);
 });
-
-const user = api.getUserInfo();
-user.then((userData) => {
-  userName.textContent = userData.name;
-  userJob.textContent = userData.about;
-  userAvatar.src = userData.avatar;
-  console.log(userData);
-}).catch((err) => {
-  alert(err);
-});
-
-const profileFormValidator = new FormValidator(validationConfig, profilePopupForm);
-profileFormValidator.enableValidation();
-const addCardFormValidator = new FormValidator(validationConfig, addCardPopupForm);
-addCardFormValidator.enableValidation();
-const avatarEditFormValidator = new FormValidator(validationConfig, avatarPopupForm);
-avatarEditFormValidator.enableValidation();
 
 const popupWithImage = new PopupWithImage(largeImagePopup);
 popupWithImage.setEventListeners();
@@ -85,19 +125,6 @@ const handleDeleteCardSubmit = (cardElement, cardId) => {
 
 const popupWithSubmit = new PopupWithSubmit(confirmationPopup, handleDeleteCardSubmit);
 
-const handleAvatarEditFormSubmit = (newAvatarUrl) => {
-  api.editUserAvatar(newAvatarUrl).then((newAvatarUrl) => {
-    userAvatar.src = newAvatarUrl.avatar;
-  }).catch((err) => {
-    alert(err)
-    }).finally(() => {
-    avatarEditPopup.uploadEffectOff();
-      });
-}
-
-const avatarEditPopup = new PopupWithForm(avatarPopup, handleAvatarEditFormSubmit);
-avatarEditPopup.setEventListeners();
-
 const handleAddCardFormSubmit = (data) => {
   api.postCard(data).then((data) => {
     cardList.addItem(createNewCard(data));
@@ -114,36 +141,6 @@ newCardPopup.setEventListeners();
 addCardButton.addEventListener('click', () => {
   newCardPopup.open();
   addCardFormValidator.resetValidation();
-});
-
-const userInfo = new UserInfo(userName, userJob);
-
-const handleProfileEditFormSubmit = (data) => {
-  userInfo.setUserInfo(data);
-  api.editUserInfo(data).then((data) => {
-    userName.textContent = data.name;
-    userJob.textContent = data.about;
-  }).catch((err) => {
-    alert(err);
-    }).finally(() => {
-      newProfilePopup.uploadEffectOff();
-      });
-};
-
-const newProfilePopup = new PopupWithForm(profilePopup, handleProfileEditFormSubmit);
-newProfilePopup.setEventListeners();
-
-profileEditButton.addEventListener('click', () => {
-  newProfilePopup.open();
-  const userInfoData = userInfo.getUserInfo();
-  profilePopupName.value = userInfoData.userName;
-  profilePopupJob.value = userInfoData.userJob;
-  profileFormValidator.resetValidation();
-});
-
-avatarEditButton.addEventListener('click', () => {
-  avatarEditPopup.open();
-  avatarEditFormValidator.resetValidation();
 });
 
 const handleCardClick = ({ link, name }) => {

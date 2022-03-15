@@ -7,6 +7,7 @@ export default class PopupWithForm extends Popup {
     this._handleFormSubmit = handleFormSubmit;
     this._popupForm = this._popupElement.querySelector('.popup__form');
     this._inputList = Array.from(this._popupElement.querySelectorAll('.popup__input'));
+    this._submitButton = this._popupForm.querySelector('.popup__submit-button');
   }
 
   setEventListeners() {
@@ -25,18 +26,18 @@ export default class PopupWithForm extends Popup {
   }
 
   uploadEffectOn() {
-    if (this._popupForm.querySelector('.popup__submit-button').textContent === 'Сохранить') {
-      this._popupForm.querySelector('.popup__submit-button').textContent = 'Сохранение...'
-    } else if (this._popupForm.querySelector('.popup__submit-button').textContent === 'Создать') {
-      this._popupForm.querySelector('.popup__submit-button').textContent = 'Создание...'
+    if (this._submitButton.textContent === 'Сохранить') {
+      this._submitButton.textContent = 'Сохранение...'
+    } else if (this._submitButton.textContent === 'Создать') {
+      this._submitButton.textContent = 'Создание...'
     }
   }
 
   uploadEffectOff() {
-    if (this._popupForm.querySelector('.popup__submit-button').textContent === 'Сохранение...') {
-      this._popupForm.querySelector('.popup__submit-button').textContent = 'Сохранить'
-    } else if (this._popupForm.querySelector('.popup__submit-button').textContent === 'Создание...') {
-      this._popupForm.querySelector('.popup__submit-button').textContent = 'Создать'
+    if (this._submitButton.textContent === 'Сохранение...') {
+      this._submitButton.textContent = 'Сохранить'
+    } else if (this._submitButton.textContent === 'Создание...') {
+      this._submitButton.textContent = 'Создать'
     }
   }
 
