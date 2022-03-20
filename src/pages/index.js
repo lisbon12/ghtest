@@ -39,22 +39,28 @@ const avatarEditFormValidator = new FormValidator(validationConfig, avatarPopupF
 avatarEditFormValidator.enableValidation();
 
 const api = new Api({
-  cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort36/cards/',
-  userInfoUrl: 'https://nomoreparties.co/v1/cohort36/users/me/',
-  userAvatarUrl: 'https://mesto.nomoreparties.co/v1/cohort36/users/me/avatar/',
+  cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-37/cards/',
+  userInfoUrl: 'https://nomoreparties.co/v1/cohort-37/users/me/',
+  userAvatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-37/users/me/avatar/',
   headers: {
-    authorization: 'e06c5c48-192d-40c5-8786-85ace49aadcc',
+    authorization: '0d42fc8d-987f-4cd6-8e38-433e5816658e',
     'Content-Type': 'application/json'
   }
 });
 
-api.getUserInfo().then((userData) => {
-  init(userData);
+Promise.all([api.getUserInfo(), api.getCards()])
+.then((responses) => {
+  const userData = responses[0];
+  const cards = responses[1];
+  init(userData, cards);
 }).catch((err) => {
   alert(err);
 });
 
-const init = (userData) => {
+const init = (userData, cards) => {
+
+  const userId = userData._id;
+
   const userInfo = new UserInfo(userData, userNameField, userJobField, userAvatarField);
   userInfo.setUserInfo(userData);
 
@@ -78,6 +84,20 @@ const init = (userData) => {
         });
   }
 
+  const handleAddCardFormSubmit = (data) => {
+    api.postCard(data).then((data) => {
+      renderer(data);
+    }).catch((err) => {
+        alert(err);
+      }).finally(() => {
+        newCardPopup.uploadEffectOff();
+        });
+  }
+
+  const handleCardClick = ({ link, name }) => {
+    popupWithImage.open({ link, name });
+  }
+
   const newProfilePopup = new PopupWithForm(profilePopup, handleProfileEditFormSubmit);
   newProfilePopup.setEventListeners();
 
@@ -96,61 +116,52 @@ const init = (userData) => {
     avatarEditPopup.open();
     avatarEditFormValidator.resetValidation();
   });
-}
 
-const cardsArray = api.getCards();
-cardsArray.then((arrayOfCards) => {
-  arrayOfCards.reverse().forEach((card) => {
-    cardList.addItem(createNewCard(card))
-  });
-}).catch((err) => {
-  alert(err);
-});
+  const renderer = (data) => {
+    const handleLikeClick = (cardId) => {
+      if (card.isLiked()) {
+        api.deleteLike(cardId).then((res) => {
+          card.setLikes(res.likes);
+        }).catch((err) => {
+          alert(err);
+        });
+      } else {
+        api.putLike(cardId).then((res) => {
+          card.setLikes(res.likes);
+        }).catch((err) => {
+          alert(err);
+        });
+      }
+    }
 
-const popupWithImage = new PopupWithImage(largeImagePopup);
-popupWithImage.setEventListeners();
-
-const handleDeleteCardClick = (cardElement, cardId) => {
-  popupWithSubmit.open();
-  popupWithSubmit.setEventListeners(cardElement, cardId);
-}
-
-const handleDeleteCardSubmit = (cardElement, cardId) => {
-  api.deleteCard(cardId).then(() => {
-    cardElement.remove();
-  }).catch((err) => {
-    alert(err);
-  });
-}
-
-const popupWithSubmit = new PopupWithSubmit(confirmationPopup, handleDeleteCardSubmit);
-
-const handleAddCardFormSubmit = (data) => {
-  api.postCard(data).then((data) => {
-    cardList.addItem(createNewCard(data));
-  }).catch((err) => {
-      alert(err);
-    }).finally(() => {
-      newCardPopup.uploadEffectOff();
+    const handleDeleteCardClick = (cardId) => {
+      popupWithSubmit.open();
+      popupWithSubmit.changeSubmitHandler(() => {
+        api.deleteCard(cardId).then(() => {
+          card.deleteCard();
+          popupWithSubmit.close();
+        })
       });
+    }
+      const card = new Card(data, '#card-template', userId, handleCardClick, handleDeleteCardClick, handleLikeClick);
+      const cardElement = card.createCard();
+      cardList.addItem(cardElement);
+  }
+
+  const cardList = new Section(cards, renderer, '.elements');
+  cardList.renderAllItems();
+
+  const newCardPopup = new PopupWithForm(addCardPopup, handleAddCardFormSubmit);
+  newCardPopup.setEventListeners();
+
+  addCardButton.addEventListener('click', () => {
+    newCardPopup.open();
+    addCardFormValidator.resetValidation();
+  });
+
+  const popupWithSubmit = new PopupWithForm(confirmationPopup);
+  popupWithSubmit.setEventListeners();
+
+  const popupWithImage = new PopupWithImage(largeImagePopup);
+  popupWithImage.setEventListeners();
 }
-
-const newCardPopup = new PopupWithForm(addCardPopup, handleAddCardFormSubmit);
-newCardPopup.setEventListeners();
-
-addCardButton.addEventListener('click', () => {
-  newCardPopup.open();
-  addCardFormValidator.resetValidation();
-});
-
-const handleCardClick = ({ link, name }) => {
-  popupWithImage.open({ link, name });
-}
-
-const createNewCard = (data) => {
-  const card = new Card(data, '#card-template', handleCardClick, handleDeleteCardClick, api);
-  const cardElement = card.createCard();
-  return cardElement
-}
-
-const cardList = new Section('.elements');
