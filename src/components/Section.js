@@ -8,7 +8,8 @@ export default class Section {
 
   renderAllItems() {
     this._items.reverse().forEach((item) => {
-      this._renderer(item);
+      const newItem = this._renderer(item);
+      this.addItem(newItem);
     });
   }
 

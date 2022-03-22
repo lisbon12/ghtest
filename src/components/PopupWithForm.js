@@ -15,7 +15,7 @@ export default class PopupWithForm extends Popup {
       event.preventDefault();
       this.uploadEffectOn();
       this._handleFormSubmit(this._getInputValues());
-      this.close();
+      // this.close();
     })
     super.setEventListeners();
   }
@@ -34,6 +34,8 @@ export default class PopupWithForm extends Popup {
       this._submitButton.textContent = 'Сохранение...'
     } else if (this._submitButton.textContent === 'Создать') {
       this._submitButton.textContent = 'Создание...'
+    } else if (this._submitButton.textContent === 'Да') {
+      this._submitButton.textContent = 'Удаление...'
     }
   }
 
@@ -42,6 +44,8 @@ export default class PopupWithForm extends Popup {
       this._submitButton.textContent = 'Сохранить'
     } else if (this._submitButton.textContent === 'Создание...') {
       this._submitButton.textContent = 'Создать'
+    } else if (this._submitButton.textContent === 'Удаление...') {
+      this._submitButton.textContent = 'Да'
     }
   }
 

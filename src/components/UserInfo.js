@@ -1,9 +1,9 @@
 export default class UserInfo {
 
   constructor({ _id }, userNameField, userJobField, userAvatarField) {
-    this._userNameField = userNameField;
-    this._userJobField = userJobField;
-    this._userAvatarField = userAvatarField;
+    this._userNameField = document.querySelector(userNameField);
+    this._userJobField = document.querySelector(userJobField);
+    this._userAvatarField = document.querySelector(userAvatarField);
     this._userId = _id;
   }
 

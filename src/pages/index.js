@@ -5,7 +5,6 @@ import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
-import PopupWithSubmit from '../components/PopupWithSubmit.js';
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
 
@@ -22,9 +21,6 @@ import {
   avatarPopupForm,
   profileEditButton,
   addCardButton,
-  userNameField,
-  userJobField,
-  userAvatarField,
   avatarEditButton,
   validationConfig
 } from '../utils/constants.js'
@@ -61,7 +57,7 @@ const init = (userData, cards) => {
 
   const userId = userData._id;
 
-  const userInfo = new UserInfo(userData, userNameField, userJobField, userAvatarField);
+  const userInfo = new UserInfo(userData, '.profile__title', '.profile__subtitle', '.profile__avatar');
   userInfo.setUserInfo(userData);
 
   const handleProfileEditFormSubmit = (data) => {
@@ -71,6 +67,7 @@ const init = (userData, cards) => {
       alert(err);
       }).finally(() => {
         newProfilePopup.uploadEffectOff();
+        newProfilePopup.close();
         });
   }
 
@@ -80,17 +77,20 @@ const init = (userData, cards) => {
     }).catch((err) => {
       alert(err)
       }).finally(() => {
-      avatarEditPopup.uploadEffectOff();
+        avatarEditPopup.uploadEffectOff();
+        avatarEditPopup.close();
         });
   }
 
   const handleAddCardFormSubmit = (data) => {
     api.postCard(data).then((data) => {
-      renderer(data);
+      const newCard = createCard(data);
+      cardList.addItem(newCard);
     }).catch((err) => {
         alert(err);
       }).finally(() => {
         newCardPopup.uploadEffectOff();
+        newCardPopup.close();
         });
   }
 
@@ -117,38 +117,47 @@ const init = (userData, cards) => {
     avatarEditFormValidator.resetValidation();
   });
 
-  const renderer = (data) => {
-    const handleLikeClick = (cardId) => {
-      if (card.isLiked()) {
-        api.deleteLike(cardId).then((res) => {
-          card.setLikes(res.likes);
-        }).catch((err) => {
-          alert(err);
-        });
-      } else {
-        api.putLike(cardId).then((res) => {
-          card.setLikes(res.likes);
-        }).catch((err) => {
-          alert(err);
-        });
-      }
-    }
+  const createCard = (data) => {
 
-    const handleDeleteCardClick = (cardId) => {
-      popupWithSubmit.open();
-      popupWithSubmit.changeSubmitHandler(() => {
-        api.deleteCard(cardId).then(() => {
-          card.deleteCard();
-          popupWithSubmit.close();
-        })
-      });
-    }
-      const card = new Card(data, '#card-template', userId, handleCardClick, handleDeleteCardClick, handleLikeClick);
-      const cardElement = card.createCard();
-      cardList.addItem(cardElement);
+      const card = new Card(
+        data,
+        '#card-template',
+        userId,
+        handleCardClick,
+        (cardId) => {
+          popupWithSubmit.open();
+          popupWithSubmit.changeSubmitHandler(() => {
+            api.deleteCard(cardId).then(() => {
+              card.deleteCard();
+              popupWithSubmit.close();
+            }).catch((err) => {
+              alert(err);
+            }).finally(() => {
+              popupWithSubmit.uploadEffectOff();
+              popupWithSubmit.close();
+            })
+          });
+        },
+        (cardId) => {
+          if (card.isLiked()) {
+            api.deleteLike(cardId).then((res) => {
+              card.setLikes(res.likes);
+            }).catch((err) => {
+              alert(err);
+            });
+          } else {
+            api.putLike(cardId).then((res) => {
+              card.setLikes(res.likes);
+            }).catch((err) => {
+              alert(err);
+            });
+          }
+        });
+      const cardElement = card.generateCard();
+      return cardElement
   }
 
-  const cardList = new Section(cards, renderer, '.elements');
+  const cardList = new Section(cards, createCard, '.elements');
   cardList.renderAllItems();
 
   const newCardPopup = new PopupWithForm(addCardPopup, handleAddCardFormSubmit);

@@ -61,7 +61,7 @@ export default class Card {
     }
   }
 
-  createCard() {
+  generateCard() {
     this._element = this._getTemplate();
     const elementImage = this._element.querySelector('.element__image');
     elementImage.src = this._link;
